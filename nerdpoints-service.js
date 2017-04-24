@@ -48,9 +48,14 @@ let add = (user, points, isAddition) => {
 	return ref.child(user.id).once("value")
 		.then((data) => {
 			let userData = data.val();
-			userData.points = isAddition ? parseInt(userData.points + points) : parseInt(userData.points - points);
-			ref.child(user.id).update(userData);
-			return get(true);
+			if(userData) {
+				userData.points = isAddition ? parseInt(userData.points + points) : parseInt(userData.points - points);
+				ref.child(user.id).update(userData);
+				return get(true);
+			} else {
+				ref.child(user.id).set({name : `${user.first_name} ${user.last_name}`, points : isAddition ? points : -1 * points})
+				return get(true)
+			}
 		})
 };
 
@@ -98,8 +103,8 @@ var vote = (user, action) => {
 				return root.ref(`current/${firstKey}`).update(cur).then((data) => {return cur});
 			} else if(cur[action][user]) {
 				throw createError(1, "el usuario ya voto", cur);
-            } else if(action == APPROVE && Object.keys(cur[action]).length == MAX_APPROVES - 1) {
-                return add(cur.user, cur.points, cur.isAddition)
+			} else if(action == APPROVE && Object.keys(cur[action]).length == MAX_APPROVES - 1) {
+				return add(cur.user, cur.points, cur.isAddition)
 					.then(() => {
 						return root.ref(`current/${firstKey}`).remove();
 					})
@@ -112,8 +117,8 @@ var vote = (user, action) => {
 					.catch((err) => {
 						throw err;
 					})
-            } else if(action == DENY && Object.keys(cur[action]).length == MAX_APPROVES - 1) {
-                    return root.ref(`current/${firstKey}`).remove()
+			} else if(action == DENY && Object.keys(cur[action]).length == MAX_APPROVES - 1) {
+				return root.ref(`current/${firstKey}`).remove()
 
 					.then(() => {
 						cur.isRemoved = true;
@@ -123,15 +128,15 @@ var vote = (user, action) => {
 					.catch((err) => {
 						throw err;
 					})
-            }
+			}
 		})
 };
 
 let pretty = (persons) => {
 	let users = [];
 	persons.forEach((child) => {
-	     users.push(child.val ? child.val() : child)
-     });
+		users.push(child.val ? child.val() : child)
+	});
 	users.sort((a,b) => { return a["points"] > b["points"] ? -1 : (a["points"] < b["points"] ? 1 : 0) })
 	let result = "";
 	for(let user in users) {
