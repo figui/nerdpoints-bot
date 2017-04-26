@@ -6,7 +6,7 @@ let nerdpoints = require("./nerdpoints-service");
 let bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: true });
 
 let validPayload = (msg) => {
-	if(msg.entities.length > 0 && msg.entities.find( (entity ) => { return entity.type == "text_mention" || entity.type == "mention" }) != undefined) {
+	if(msg.entities.length > 0 && msg.entities.find( (entity) => { return entity.type == "text_mention" || entity.type == "mention" }) != undefined) {
 		let user = msg.entities.find( (entity ) => { return entity.type == "text_mention" || entity.type == "mention" });
 		user = user.user ? user.user : { id :  msg.text.substr(user.offset, user.length) };
 		let pointsRaw = /[\+\-]?\d+/.exec(msg.text);
@@ -32,10 +32,10 @@ let vote = (msg, action) => {
         .then((data) => {
             if(data.isRemoved) {
                 nerdpoints.get(true).then((list) => {
-                    bot.sendMessage(msg.chat.id, `Se *${action == nerdpoints.APPROVE ? "aprobó" : "denegó"}*! los *${data.points}* de *${userToString(data.user)}*\n\nLa lista quedó:\n${list}` , { parse_mode : "Markdown" });
+                    bot.sendMessage(msg.chat.id, `Se *${action == nerdpoints.APPROVE ? "aprobó" : "denegó"}*! los *${data.isAddition ? '+' : '-'}${data.points}* de *${userToString(data.user)}*\n\nLa lista quedó:\n${list}` , { parse_mode : "Markdown" });
                 })
             } else {
-                bot.sendMessage(msg.chat.id, `${action == nerdpoints.APPROVE ? "Aprobado" : "Denegado"}!!! los *${data.points}* de *${userToString(data.user)} Falta 1 voto mas!!*`, {parse_mode : "Markdown"});
+                bot.sendMessage(msg.chat.id, `${action == nerdpoints.APPROVE ? "Aprobado" : "Denegado"}!!! los *${data.isAddition ? '+' : '-'}${data.points}* de *${userToString(data.user)} Falta 1 voto mas!!*`, {parse_mode : "Markdown"});
             }
         })
 
@@ -56,7 +56,7 @@ bot.onText(/\/nerdpoint (\@)*[\w\s]+ [\+\-]?\d+/, (msg, match) => {
 	if(data) {
 	    nerdpoints.push(data.user, data.points, data.isAddition)
             .then((result) => {
-                bot.sendMessage(msg.chat.id, `Votacion para agregarle ${data.points} puntos a ${userToString(data.user)}`, { parse_mode : "Markdown" });
+                bot.sendMessage(msg.chat.id, `Votacion para ${data.isAddition ? 'agregar' : 'restarle'} ${data.points} puntos a ${userToString(data.user)}`, { parse_mode : "Markdown" });
             })
 
             .catch((err) => {
