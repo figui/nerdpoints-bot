@@ -13,6 +13,7 @@ let app = firebase.initializeApp({
 const MAX_APPROVES = 2;
 const APPROVE = "approve";
 const DENY = "deny";
+const TRANSLATED_MONTHS = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 let root = app.database();
 let ref = root.ref("users");
@@ -185,7 +186,8 @@ let lastMonth = () => {
                     users.push(childSnap.val());
                 }
             })
-            let result = `Resultados del mes de ${d.toLocaleString("es-AR", { month: "long" })} : \n\n`
+            d.setMonth(d.getMonth() - 1);
+            let result = `Resultados del mes de ${TRANSLATED_MONTHS[d.getMonth()]} : \n\n`
             users = users.reverse()
             users.forEach((user, i) => {
                 result += `${user.name} : *${user.points}*${i == 0 ? '*<= Ganó*' : ''}\n`;
