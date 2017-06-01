@@ -173,14 +173,33 @@ let reset = () => {
 		});
 }
 
+let lastMonthWinner = () => {
+    let d = new Date(); d.setMonth(d.getMonth() - 1);
+    let key = `/history/${d.toLocaleString("en-US", { month: "long" }).toLowerCase() + "-" + d.getFullYear()}`;
+    root.ref(key).orderByChild("points").once('value')
+        .then((s) =>{
+            let users = [];
+            s.forEach((childSnap) => {
+                users.id = childSnap.key;
+                users.push(childSnap.val());
+            })
+            let result = `Resultados del mes de ${d.toLocaleString("es-AR", { month: "long" }).charAt(0).toUpperCase()} : \n`
+            users.reverse().forEach((user, i) => {
+                result += `${user.name} : *${user.points}*${i == 0 ? '*<= Ganó*' : ''}\n`;
+            })
+            return result;
+        })
+}
+
 module.exports = {
-	add : add,
-	get : get,
-	current : current,
-	currents : currents,
-	push : push,
-	vote : vote,
+    add : add,
+    get : get,
+    current : current,
+    currents : currents,
+    push : push,
+    vote : vote,
     reset : reset,
-	APPROVE : APPROVE,
-	DENY : DENY
+    lastMonthWinner : lastMonthWinner,
+    APPROVE : APPROVE,
+    DENY : DENY
 };
