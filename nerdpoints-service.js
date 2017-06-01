@@ -174,14 +174,16 @@ let reset = () => {
 }
 
 let lastMonth = () => {
-    let d = new Date(); d.setMonth(d.getMonth() - 1);
+    let d = new Date();
     let key = `/history/${d.toLocaleString("en-US", { month: "long" }).toLowerCase() + "-" + d.getFullYear()}`;
     return root.ref(key).orderByChild("points").once('value')
         .then((s) =>{
             let users = [];
             s.forEach((childSnap) => {
-                users.id = childSnap.key;
-                users.push(childSnap.val());
+                if(childSnap.key != "winner") {
+                    users.id = childSnap.key;
+                    users.push(childSnap.val());
+                }
             })
             let result = `Resultados del mes de ${d.toLocaleString("es-AR", { month: "long" })} : \n\n`
             users = users.reverse()
