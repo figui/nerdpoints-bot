@@ -183,8 +183,9 @@ let lastMonth = () => {
                 users.id = childSnap.key;
                 users.push(childSnap.val());
             })
-            let result = `Resultados del mes de ${d.toLocaleString("es-AR", { month: "long" }).charAt(0).toUpperCase()} : \n`
-            users.reverse().forEach((user, i) => {
+            let result = `Resultados del mes de ${d.toLocaleString("es-AR", { month: "long" })} : \n\n`
+            users = users.reverse()
+            users.forEach((user, i) => {
                 result += `${user.name} : *${user.points}*${i == 0 ? '*<= Ganó*' : ''}\n`;
             })
             return result;
