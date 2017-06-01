@@ -190,7 +190,7 @@ let lastMonth = () => {
             let result = `Resultados del mes de ${TRANSLATED_MONTHS[d.getMonth()]} : \n\n`
             users = users.reverse()
             users.forEach((user, i) => {
-                result += `${user.name} : *${user.points}*${i == 0 ? '*<= Ganó*' : ''}\n`;
+                result += `${user.name} : *${user.points}*${i == 0 ? ' *<= Ganó*' : ''}\n`;
             })
             return result;
         })
