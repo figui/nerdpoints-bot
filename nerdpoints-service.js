@@ -173,7 +173,7 @@ let reset = () => {
 		});
 }
 
-let lastMonthWinner = () => {
+let lastMonth = () => {
     let d = new Date(); d.setMonth(d.getMonth() - 1);
     let key = `/history/${d.toLocaleString("en-US", { month: "long" }).toLowerCase() + "-" + d.getFullYear()}`;
     root.ref(key).orderByChild("points").once('value')
@@ -199,7 +199,7 @@ module.exports = {
     push : push,
     vote : vote,
     reset : reset,
-    lastMonthWinner : lastMonthWinner,
+    lastMonth : lastMonth,
     APPROVE : APPROVE,
     DENY : DENY
 };
