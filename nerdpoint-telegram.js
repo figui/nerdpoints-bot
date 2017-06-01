@@ -105,6 +105,6 @@ bot.onText(/\/current/, (msg, match) => {
         })
 });
 
-bot.onText(/\/lastMonth/, (msg, match) => {
+bot.onText(/\/lastmonth/, (msg, match) => {
     bot.sendMessage(msg.chat.id, nerdpoints.lastMonth(), {parse_mode : "Markdown"});
 });
