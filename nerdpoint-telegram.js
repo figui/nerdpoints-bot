@@ -106,5 +106,12 @@ bot.onText(/\/current/, (msg, match) => {
 });
 
 bot.onText(/\/lastmonth/, (msg, match) => {
-    bot.sendMessage(msg.chat.id, nerdpoints.lastMonth(), {parse_mode : "Markdown"});
+    nerdpoints.lastMonth()
+        .then((data) => {
+            bot.sendMessage(msg.chat.id, data, {parse_mode : "Markdown"});
+        })
+        .catch((err) => {
+            bot.sendMessage(msg.chat.id, "Algo salio mal amiguuu", {parse_mode : "Markdown"});
+        })
+
 });

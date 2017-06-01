@@ -176,7 +176,7 @@ let reset = () => {
 let lastMonth = () => {
     let d = new Date(); d.setMonth(d.getMonth() - 1);
     let key = `/history/${d.toLocaleString("en-US", { month: "long" }).toLowerCase() + "-" + d.getFullYear()}`;
-    root.ref(key).orderByChild("points").once('value')
+    return root.ref(key).orderByChild("points").once('value')
         .then((s) =>{
             let users = [];
             s.forEach((childSnap) => {
