@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "babel-node": "babel-node --presets=latest",
+    "start": "nodemon --exec npm run babel-node -- ./src/index.js",
+    "debug": "nodemon --exec npm run babel-node-debug -- ./src/index.js",
+	"build": "babel src -d dist",
+	"compile": "babel src --out-dir dist --source-maps --watch"
   },
   "dependencies": {
     "firebase": "^3.7.1",
@@ -13,6 +16,17 @@
     "node-telegram-bot-api": "^0.24.0",
     "restify": "^4.3.0"
   },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
+  },
   "author": "figui",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+	"babel-preset-es2015": "^6.24.1",
+	"babel-preset-latest": "^6.24.1",
+    "nodemon": "^1.17.2"
+  }
 }
