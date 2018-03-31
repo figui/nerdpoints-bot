@@ -2,3 +2,7 @@
 node_modules/
 npm-debug.log
 /nerdpoints-bot.iml
+dist/
+.vscode
+package-lock.json
+Dockerfile
